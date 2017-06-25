@@ -53,6 +53,7 @@ $config = [
                 'contact'=>'site/contact',
                 'login'=>'site/login',
                 'logout'=>'site/logout',
+                'transactions'=>'site/transactions',
             ],
         ],
     ],

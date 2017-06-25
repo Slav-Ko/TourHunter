@@ -44,15 +44,8 @@ class LoginForm extends Model
 
             $user = User::findByUsername($this->username);
 
-            if ($user == null){
-                $user = new User();
-                $user->username = $this->username;
-                $user->email = md5(rand(2,time())).'@mail.ru';
-                $user->setPassword('222222');
-                $user->generateAuthKey();
-                $user->status = User::STATUS_ACTIVE;
-                $user->save();
-            }
+            if ($user == null)
+                $user = User::createUser($this->username);
 
             return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
         }

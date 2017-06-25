@@ -73,6 +73,20 @@ class User extends ActiveRecord implements IdentityInterface
         throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
     }
 
+    public static function createUser($username)
+    {
+        $user = new User();
+
+        $user->username = $username;
+        $user->email = md5(rand(2,time())).'@mail.ru';
+        $user->setPassword('222222');
+        $user->generateAuthKey();
+        $user->status = self::STATUS_ACTIVE;
+        $user->save();
+
+        return $user;
+    }
+
     /**
      * Finds user by username
      *

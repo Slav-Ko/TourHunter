@@ -41,6 +41,11 @@ AppAsset::register($this);
             ['label' => Yii::t('app', 'About'), 'url' => ['/site/about']],
             ['label' => Yii::t('app', 'Contact'), 'url' => ['/site/contact']],
             Yii::$app->user->isGuest ? (
+                '<li></li>' 
+            ) : ( 
+                ['label' => Yii::t('app', 'Transactions'), 'url' => ['/site/transactions']]
+            ),
+            Yii::$app->user->isGuest ? (
                 ['label' => Yii::t('app', 'Login'), 'url' => ['/site/login']]
             ) : (
                 '<li>'

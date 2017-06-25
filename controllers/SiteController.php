@@ -12,6 +12,7 @@ use yii\data\Pagination;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\User;
+use app\models\Transact;
 
 class SiteController extends Controller
 {
@@ -57,6 +58,60 @@ class SiteController extends Controller
         ];
     }
 
+    public function actionTransactions()
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
+        $model=new Transact();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
+            $user = User::findByUsername($model->username);
+
+            if ($user == null)
+                $user = User::createUser($model->username);
+
+            /* debet plus */
+            $user->balance=$user->balance+$model->amount;
+            $user->save();
+
+            /* credit minus */
+            $from=User::findOne([ 'id' => Yii::$app->user->id ]);
+            $from->balance=$from->balance-$model->amount;
+            $from->save();
+
+            /* create transaction */
+            $model->debet=$user->id;
+            $model->credit=Yii::$app->user->id;
+            $model->time=time();
+            $model->save();
+
+            $model=new Transact();
+        }
+
+        $query = Transact::find()
+            ->where('debet='.Yii::$app->user->id)
+            ->orWhere('credit='.Yii::$app->user->id);
+
+        $pages = new Pagination([
+            'totalCount' => $query->count(), 
+            'pageSize' => 10,
+            'pageSizeParam' => false, 
+            'forcePageParam' => false
+        ]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query'=>$query,
+            'pagination' => $pages,
+        ]);
+
+        return $this->render('transact', [
+            'model' => $model,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
     /**
      * Displays homepage.
      *
