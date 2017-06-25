@@ -37,14 +37,14 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => Yii::t('app', 'Home'), 'url' => ['/']],
-            ['label' => Yii::t('app', 'About'), 'url' => ['/site/about']],
-            ['label' => Yii::t('app', 'Contact'), 'url' => ['/site/contact']],
+            ['label' => Yii::t('app', 'Balance'), 'url' => ['/']],
             Yii::$app->user->isGuest ? (
                 '<li></li>' 
             ) : ( 
                 ['label' => Yii::t('app', 'Transactions'), 'url' => ['/site/transactions']]
             ),
+            ['label' => Yii::t('app', 'About'), 'url' => ['/site/about']],
+            ['label' => Yii::t('app', 'Contact'), 'url' => ['/site/contact']],
             Yii::$app->user->isGuest ? (
                 ['label' => Yii::t('app', 'Login'), 'url' => ['/site/login']]
             ) : (

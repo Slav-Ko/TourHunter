@@ -10,6 +10,14 @@ use yii\grid\GridView;
 ?>
 <div class="site-transact">
 
+    <div class="col-lg-12">
+        <?php if(Yii::$app->session->hasFlash('error')): ?>
+            <div class="alert alert-danger" role="alert">
+                <?= Yii::$app->session->getFlash('error') ?>
+            </div>
+        <?php endif; ?>
+    </div>
+
     <?php $form = ActiveForm::begin(); ?>
 
         <?= $form->field($model, 'username') ?>

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'Home' => 'Домой',
+    'Balance' => 'Баланс',
     'My Company' => 'Моя компания',
     'About' => 'О компании',
     'Contact' => 'Обратная связь',
@@ -17,4 +17,5 @@ return [
     'time of transaction' => 'Дата перевода',
 
     'Submit' => 'Перевод',
+    'selftransact' => 'Нельзя переводить деньги самому себе',
 ];

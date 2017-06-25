@@ -68,27 +68,37 @@ class SiteController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
-            $user = User::findByUsername($model->username);
-
-            if ($user == null)
-                $user = User::createUser($model->username);
-
-            /* debet plus */
-            $user->balance=$user->balance+$model->amount;
-            $user->save();
-
-            /* credit minus */
             $from=User::findOne([ 'id' => Yii::$app->user->id ]);
-            $from->balance=$from->balance-$model->amount;
-            $from->save();
 
-            /* create transaction */
-            $model->debet=$user->id;
-            $model->credit=Yii::$app->user->id;
-            $model->time=time();
-            $model->save();
-
-            $model=new Transact();
+            if ($from->username==$model->username)
+            {
+                /* user cant transact to himself */
+                Yii::$app->session->setFlash('error', Yii::t('app', 'selftransact' ));
+            }
+            else
+            {
+                /* do transaction */
+                $user = User::findByUsername($model->username);
+    
+                if ($user == null)
+                    $user = User::createUser($model->username);
+    
+                /* debet plus */
+                $user->balance=$user->balance+$model->amount;
+                $user->save();
+    
+                /* credit minus */
+                $from->balance=$from->balance-$model->amount;
+                $from->save();
+    
+                /* create transaction */
+                $model->debet=$user->id;
+                $model->credit=Yii::$app->user->id;
+                $model->time=time();
+                $model->save();
+    
+                $model=new Transact();
+            }
         }
 
         $query = Transact::find()
