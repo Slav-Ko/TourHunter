@@ -7,8 +7,11 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
+use yii\data\ActiveDataProvider;
+use yii\data\Pagination;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\User;
 
 class SiteController extends Controller
 {
@@ -61,7 +64,22 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+
+        $query = User::find()->where('status='.User::STATUS_ACTIVE);
+
+        $pages = new Pagination([
+            'totalCount' => $query->count(), 
+            'pageSize' => 10,
+            'pageSizeParam' => false, 
+            'forcePageParam' => false
+        ]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query'=>$query,
+            'pagination' => $pages,
+        ]);
+
+        return $this->render('index',compact('dataProvider','pages'));
     }
 
     /**
