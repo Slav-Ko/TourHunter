@@ -37,7 +37,7 @@ class Transact extends \yii\db\ActiveRecord
         return [
             [['debet', 'credit', 'time'], 'integer'],
             [['username', 'amount'], 'required'],
-            [['amount'], 'number'],
+            [['amount'], 'number','min' => 0.01],
             [['credit'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['credit' => 'id']],
             [['debet'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['debet' => 'id']],
             [['username'], 'string', 'max' => 100],
